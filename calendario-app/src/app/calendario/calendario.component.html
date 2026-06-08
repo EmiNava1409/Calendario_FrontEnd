@@ -1,0 +1,132 @@
+<div class="calendar-wrapper">
+  <div class="calendar-top d-flex justify-content-between align-items-center mb-3">
+    <div class="nav-title d-flex align-items-center">
+      <button class="btn btn-primary" (click)="prevDate()">&#8592;</button>
+      <h2 class="mx-3">{{ viewDate | date:'MMMM yyyy' | titlecase }}</h2>
+      <button class="btn btn-primary" (click)="nextDate()">&#8594;</button>
+    </div>
+    <div class="view-buttons d-flex" style="gap: 5px;">
+      <button class="mi-boton-vista" [class.active]="view === CalendarView.Month" (click)="setView(CalendarView.Month)">Mes</button>
+      <button class="mi-boton-vista" [class.active]="view === CalendarView.Week" (click)="setView(CalendarView.Week)">Semana</button>
+      <button class="mi-boton-vista" [class.active]="view === CalendarView.Day" (click)="setView(CalendarView.Day)">Día</button>
+      <div class="dropdown">
+        <button class="mi-boton-vista dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Descargar</button>
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item" (click)="descargar('PDF')">PDF</a></li>
+          <li><a class="dropdown-item" (click)="descargar('EXCEL')">Excel</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="cal-calendar-container">
+    <div *ngIf="view === CalendarView.Month">
+      <mwl-calendar-month-view
+        [viewDate]="viewDate"
+        [events]="events"
+        [locale]="'es'"
+        [cellTemplate]="customCellTemplate" 
+        (dayClicked)="abrirModal(miModal, $event.day)">
+      </mwl-calendar-month-view>
+    </div>
+
+    <div *ngIf="view === CalendarView.Week || view === CalendarView.Day" class="scheduler-container" [attr.key]="view">
+      <calendar-scheduler-view
+        class="custom-scheduler"
+        [viewDate]="viewDate"
+        [events]="events"
+        [locale]="'es'"
+        [hourFormat]="'HH'"
+        [dayStartHour]="7"
+        [dayEndHour]="23"
+        [dayEndMinute]="59"
+        [hourSegments]="1"
+        [hourSegmentHeight]="110"
+        [snapDragDisabled]="true"       
+        [snapResizeDisabled]="true" 
+        [eventSnapSize]="1"   
+        [validateDragResize]="false" 
+        [viewDays]="view === CalendarView.Day ? 1 : 7"
+        [refresh]="refresh"
+        [eventTitleTemplate]="eventTitleTpl"
+        [showCurrentTimeMarker]="true"
+        (hourSegmentClicked)="abrirModal(miModal, $event)"
+        (eventClicked)="abrirModal(miModal, $event)"
+        (eventTimesChanged)="eventTimesChanged($event)"> 
+      </calendar-scheduler-view>
+    </div>
+  </div>
+
+  <ng-template #eventTitleTpl let-event="event">
+    <div style="display:flex; flex-direction:column; height:100%;">
+      <span style="font-size:10px; color:#666; line-height:1.2;">{{ event.start | date:'h:mm a' }} - {{ event.end | date:'h:mm a' }}</span>
+      <span [style.color]="event.meta?.colorText" style="font-weight:600; font-size:11px; line-height:1.3; margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ event.title }}</span>
+      <span [style.color]="event.meta?.colorText" style="font-size:10px; opacity:0.85; line-height:1.3; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ event.meta?.docente }}</span>
+    </div>
+  </ng-template>
+
+  <ng-template #customCellTemplate let-day="day">
+    <div class="cal-cell-top" mwlDroppable (drop)="onMonthEventDrop($event, day.date)">
+      <span class="cal-day-number">{{ day.date | date:'d' }}</span>
+    </div>
+    <div class="cal-events">
+      <div *ngFor="let event of day.events" 
+           class="cal-event-custom" 
+           [style.backgroundColor]="event.color?.primary" 
+           mwlDraggable 
+           [dropData]="{event: event}"
+           (dragEnd)="onDragEnd($event)"
+           (click)="$event.stopPropagation(); abrirModal(miModal, { event: event })">
+        {{ event.title }}
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template #miModal let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title">{{eventoEditando ? 'Editar' : 'Registrar'}} Clase</h4>
+      <button type="button" class="btn-close" (click)="modal.dismiss()"></button>
+    </div>
+    <div class="modal-body">
+      <div class="mb-3">
+        <label class="form-label fw-bold">Fecha</label>
+        <input type="date" class="form-control" [(ngModel)]="eventoForm.fecha">
+      </div>
+      <div class="mb-3">
+        <label class="form-label fw-bold">Tipo de Docente</label>
+        <div class="segmented-control">
+          <div class="option" [class.active]="tipoDocente === 'Contratado'" (click)="tipoDocente = 'Contratado'; eventoForm.materia = ''">Contratado</div>
+          <div class="option" [class.active]="tipoDocente === 'Por Contratar'" (click)="tipoDocente = 'Por Contratar'; eventoForm.materia = ''">Por Contratar</div>
+        </div>
+      </div>
+      <div class="mb-3">
+        <label class="form-label fw-bold">Nombre del Docente</label>
+        <input type="text" class="form-control" [(ngModel)]="eventoForm.docente" placeholder="Escriba el nombre del docente">
+      </div>
+      <div class="mb-3">
+        <label class="form-label fw-bold">Materia</label>
+        <input *ngIf="tipoDocente === 'Por Contratar'" type="text" class="form-control" [(ngModel)]="eventoForm.materia" placeholder="Escriba la materia">
+        <select *ngIf="tipoDocente === 'Contratado'" class="form-select form-control" [(ngModel)]="eventoForm.materia">
+          <option value="" disabled selected hidden>Seleccione una materia</option>
+          <option *ngFor="let materia of materiasDisponibles" [value]="materia">{{ materia }}</option> 
+        </select>
+      </div>
+      <div class="row">
+        <div class="col mb-3">
+          <label class="form-label fw-bold">Inicio</label>
+          <input type="time" class="form-control" [(ngModel)]="eventoForm.inicio">
+        </div>
+        <div class="col mb-3">
+          <label class="form-label fw-bold">Fin</label>
+          <input type="time" class="form-control" [(ngModel)]="eventoForm.fin">
+        </div>
+      </div>
+      <div *ngIf="mensajeError" class="error-inline">{{ mensajeError }}</div>
+    </div>
+    <div class="modal-footer">
+      <button *ngIf="eventoEditando" class="btn btn-danger" (click)="eliminarEvento(modal)">Eliminar</button>
+      <button class="btn btn-secondary" (click)="modal.dismiss()">Cancelar</button>
+      <button class="btn btn-primary" (click)="guardarEvento(modal)">Guardar</button>
+    </div>
+  </ng-template>
+</div>

@@ -1,0 +1,294 @@
+.calendar-wrapper { 
+  padding: 20px; 
+  background: white; 
+  border-radius: 8px; 
+  font-family: Arial, sans-serif; 
+  max-width: 1100px; 
+  margin: 20px auto; 
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
+}
+
+/* Botones de Vista */
+.view-buttons button, 
+.view-buttons .btn, 
+.view-buttons .btn-primary, 
+.view-buttons .btn-outline-primary 
+{ 
+  border: 1px solid #26c6da !important; 
+  background-color: white !important; 
+  color: #26c6da !important; 
+  font-weight: bold; 
+  padding: 8px 20px !important; 
+  cursor: pointer; 
+}
+.view-buttons button.active, 
+.view-buttons .btn.active, 
+.view-buttons .btn-primary.active, 
+.view-buttons .btn-outline-primary.active 
+{ 
+  background-color: #26c6da !important; 
+  color: white !important; 
+  border-color: #26c6da !important; 
+}
+::ng-deep .cal-month-view .cal-day-cell.cal-today 
+{ 
+  background-color: #e0f7fa !important; 
+}
+::ng-deep .cal-month-view .cal-day-cell.cal-today .cal-day-number 
+{ 
+  color: #26c6da !important; 
+  font-size: inherit !important; 
+  font-weight: 400 !important; 
+}
+::ng-deep .cal-month-view .cal-day-cell 
+{ 
+  min-height: 120px !important; 
+  height: auto !important; 
+}
+::ng-deep .cal-month-view .cal-events 
+{ 
+  display: flex !important; 
+  flex-direction: column !important; 
+  gap: 2px !important; 
+  margin-top: 5px !important; 
+  overflow: visible !important; 
+}
+::ng-deep .cal-month-view .cal-day-badge 
+{ 
+  display: none !important; 
+}
+::ng-deep .cal-month-view .cal-event-container 
+{ 
+  display: block !important; 
+  width: 100% !important; 
+  max-width: 100% !important; 
+}
+
+.calendar-top 
+{ 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  margin-bottom: 20px; 
+}
+.nav-title 
+{ 
+  display: flex; 
+  align-items: center; 
+  gap: 15px; 
+}
+.nav-title h2 
+{ 
+  margin: 0; 
+  font-size: 28px; 
+  color: #222; 
+  font-weight: bold; 
+}
+.nav-title button 
+{ 
+  background: #26c6da; 
+  color: white; 
+  border: none; 
+  padding: 8px 16px; 
+  border-radius: 4px; 
+  cursor: pointer; 
+}
+
+.cal-event-custom 
+{ 
+  color: white !important; 
+  padding: 2px 5px !important; 
+  margin: 2px 0 !important; 
+  border-radius: 4px !important; 
+  font-size: 10px !important; 
+  display: block !important; 
+  width: 100% !important; 
+  cursor: pointer; 
+  white-space: nowrap; 
+  overflow: hidden; 
+  text-overflow: ellipsis; 
+}
+
+.modal-header 
+{ 
+  background-color: #f8f9fa; 
+  border-bottom: 1px solid #dee2e6; 
+}
+.modal-footer .btn-primary 
+{ 
+  background-color: #26c6da !important; 
+  border-color: #26c6da !important; 
+}
+::ng-deep calendar-scheduler-header .cal-header 
+{ 
+  text-align: center !important; 
+  padding: 8px 4px !important; 
+  border-right: 0.5px solid #e0e0e0 !important; 
+  background: white !important; 
+  color: #333 !important; 
+}
+::ng-deep .cal-scheduler-event 
+{ 
+  background-color: #e0f7fa !important; 
+  border-left: 3px solid #26c6da !important; 
+  border-radius: 0 6px 6px 0 !important; 
+  padding: 4px 6px !important; 
+  margin: 1px 2px !important; 
+}
+::ng-deep .cal-scheduler-event .cal-event-title 
+{ 
+  font-size: 11px !important; 
+  font-weight: 600 !important; 
+  color: #004d56 !important; 
+  pointer-events: none !important; 
+}
+
+.segmented-control 
+{ 
+  display: flex; 
+  background-color: #f1f3f5; 
+  border-radius: 8px; 
+  padding: 4px; 
+  border: 1px solid #dee2e6; 
+  width: 100%; 
+  margin-bottom: 15px; 
+  cursor: pointer; 
+}
+.option 
+{ 
+  flex: 1; 
+  padding: 10px; 
+  border: none; 
+  background: transparent; 
+  font-weight: 600; 
+  color: #495057; 
+  text-align: center; 
+  border-radius: 6px; 
+  transition: all 0.3s ease; 
+  font-size: 14px; 
+}
+.option.active 
+{ 
+  background-color: #26c6da !important; 
+  color: white !important; 
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+}
+
+/* Ajustes Responsive */
+@media (max-width: 768px) {
+  .calendar-wrapper { 
+    padding: 10px !important; 
+    margin: 10px !important; 
+    width: 95% !important; }
+
+  ::ng-deep .cal-month-view 
+  { 
+    overflow-x: auto !important; 
+  }
+  ::ng-deep .cal-month-view .cal-day-cell 
+  { 
+    min-height: 80px !important; 
+  }
+  ::ng-deep .cal-month-view .cal-day-number 
+  { 
+    font-size: 0.85em !important; 
+  }
+  .calendar-top 
+  { 
+    flex-direction: column; 
+    gap: 10px; 
+  }
+}
+
+/* Validación de errores*/
+.error-inline 
+{ 
+  color: #d93025; 
+  font-size: 0.85rem; 
+  margin-top: -9px; 
+  margin-bottom: 9px; 
+  font-weight: 500; 
+  padding: 5px 10px; 
+  background-color: #fce8e6; 
+  border-radius: 4px; 
+  display: block; 
+}
+
+::ng-deep .cal-scheduler-hour-segment 
+{ 
+  border-bottom: none !important; 
+}
+::ng-deep .cal-scheduler-day-column 
+{ 
+  border-right: 1px solid #e0e0e0 !important; 
+}
+::ng-deep .cal-scheduler-event,
+::ng-deep .cal-scheduler-event * {
+  cursor: move !important;
+  pointer-events: auto !important;
+}
+::ng-deep .cal-drag-in-progress,
+::ng-deep .cal-drag-in-progress * {
+  cursor: move !important;
+}
+
+
+.selector-color-wrapper {
+  margin: 20px 0;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  text-align: center;
+  border: 1px solid #e9ecef;
+}
+
+.titulo-color {
+  font-size: 14px;
+  font-weight: 600;
+  color: #495057;
+  margin-bottom: 15px;
+}
+
+.color-grid {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.color-grid input[type="color"] {
+  -webkit-appearance: none;
+  border: none;
+  width: 45px;
+  height: 45px;
+  cursor: pointer;
+  background: none;
+  transition: transform 0.2s ease;
+  border-radius: 50%;
+  border: 3px solid #26c6da; /* Tu color turquesa de marca */
+  padding: 2px;
+}
+
+.color-grid input[type="color"]:hover {
+  transform: scale(1.15);
+}
+
+.color-grid input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+.color-grid input[type="color"]::-webkit-color-swatch {
+  border: none;
+  border-radius: 50%;
+}
+
+::ng-deep .cal-month-view .cal-event {
+  cursor: move !important;
+  pointer-events: auto !important;
+}
+
+::ng-deep .cal-drag-in-progress .cal-event {
+  opacity: 0.5;
+}
+
+

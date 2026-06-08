@@ -1,0 +1,119 @@
+/* You can add global styles to this file, and also import other style files */
+@import "../node_modules/angular-calendar/css/angular-calendar.css";
+@import "../node_modules/angular-calendar-scheduler/css/angular-calendar-scheduler.css";
+@import "~bootstrap/dist/css/bootstrap.min.css";
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+}
+
+
+.cal-scheduler-time-segment {
+  font-size: 11px !important;
+  color: #555 !important;
+  font-weight: 400 !important;
+}
+
+.cal-scheduler-hour-segment {
+  height: 60px !important;
+  min-height: 60px !important;
+}
+
+.cal-scheduler-current-time-marker {
+  display: block !important;
+  height: 2px !important;
+  background-color: #ff3b30 !important;
+  position: absolute !important;
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 999 !important;
+}
+
+.cal-scheduler-current-time-marker::before {
+  content: '' !important;
+  width: 10px !important;
+  height: 10px !important;
+  border-radius: 50% !important;
+  background: #ff3b30 !important;
+  position: absolute !important;
+  left: -4px !important;
+  top: -4px !important;
+}
+
+.time-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+}
+
+.time-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #ff3b30;
+  flex-shrink: 0;
+}
+
+.time-bar {
+  flex: 1;
+  height: 2px;
+  background: #ff3b30;
+}
+
+
+body .cal-month-view .cal-day-cell.cal-today {
+  background-color: #e0f7fa !important;
+}
+
+body calendar-scheduler-header .cal-header.cal-today,
+body .cal-day-headers .cal-header.cal-today {
+  background-color: #e0f7fa !important;
+  border-bottom: 2px solid #26c6da !important;
+}
+
+body .cal-month-view .cal-day-cell.cal-today .cal-day-number {
+  color: #26c6da !important;
+  font-size: 1em !important;
+  opacity: 1 !important;
+}
+
+body calendar-scheduler-header .cal-header.cal-today .cal-day-label,
+body calendar-scheduler-header .cal-header.cal-today .cal-day-date {
+  color: #004d56 !important; /* Un tono oscuro que combina con el celeste */
+}
+
+/* Sobreescribir el color azul de los botones de navegación por el celeste que ya tienes */
+.nav-title .btn-primary {
+  background-color: #26c6da !important;
+  border-color: #26c6da !important;
+}
+
+/* Opcional: mantener el color al pasar el ratón */
+.nav-title .btn-primary:hover {
+  background-color: #00acc1 !important;
+  border-color: #00acc1 !important;
+}
+
+/* Asegurar que el menú se vea bien y no se esconda detrás de otros elementos */
+.dropdown-menu {
+  z-index: 1050;
+  min-width: 150px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.dropdown-item {
+  cursor: pointer;
+  padding: 10px 15px;
+}
+
+.dropdown-item:hover {
+  background-color: #e0f7fa;
+  color: #004d56;
+}
+
