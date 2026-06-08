@@ -1,6 +1,7 @@
 Cómo ejecutar el proyecto
 
 1.Dentro de la carpeta calendario-app, verificar la instalación de dependencias
+
 npm install
 
 
