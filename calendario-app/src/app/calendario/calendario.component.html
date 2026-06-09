@@ -1,10 +1,19 @@
 <div class="calendar-wrapper">
   <div class="calendar-top d-flex justify-content-between align-items-center mb-3">
-    <div class="nav-title d-flex align-items-center">
-      <button class="btn btn-primary" (click)="prevDate()">&#8592;</button>
-      <h2 class="mx-3">{{ viewDate | date:'MMMM yyyy' | titlecase }}</h2>
-      <button class="btn btn-primary" (click)="nextDate()">&#8594;</button>
+    <div class="nav-title d-flex flex-column align-items-center">
+      <div class="d-flex align-items-center">
+        <button class="btn btn-primary" (click)="prevDate()">&#8592;</button>
+        <h2 class="mx-3">{{ viewDate | date:'MMMM yyyy' | titlecase }}</h2>
+        <button class="btn btn-primary" (click)="nextDate()">&#8594;</button>
+      </div>
+      
+      <div *ngIf="periodoSeleccionado" 
+           class="mt-1 px-3 py-1 rounded-pill bg-light border text-primary fw-bold shadow-sm" 
+           style="font-size: 0.9rem; letter-spacing: 0.5px;">
+        {{ periodoSeleccionado }}
+      </div>
     </div>
+
     <div class="view-buttons d-flex" style="gap: 5px;">
       <button class="mi-boton-vista" [class.active]="view === CalendarView.Month" (click)="setView(CalendarView.Month)">Mes</button>
       <button class="mi-boton-vista" [class.active]="view === CalendarView.Week" (click)="setView(CalendarView.Week)">Semana</button>
@@ -42,7 +51,7 @@
         [dayEndMinute]="59"
         [hourSegments]="1"
         [hourSegmentHeight]="110"
-        [snapDragDisabled]="true"       
+        [snapDragDisabled]="true" 
         [snapResizeDisabled]="true" 
         [eventSnapSize]="1"   
         [validateDragResize]="false" 
@@ -89,9 +98,15 @@
     </div>
     <div class="modal-body">
       <div class="mb-3">
-        <label class="form-label fw-bold">Fecha</label>
-        <input type="date" class="form-control" [(ngModel)]="eventoForm.fecha">
+        <label class="form-label fw-bold">Periodo</label>
+        <select class="form-select form-control" 
+                [(ngModel)]="eventoForm.periodo" 
+                (change)="periodoSeleccionado = eventoForm.periodo">
+          <option value="" disabled selected>-- SELECCIONE PERIODO --</option>
+          <option *ngFor="let p of listaPeriodos" [value]="p">{{ p }}</option>
+        </select>
       </div>
+
       <div class="mb-3">
         <label class="form-label fw-bold">Tipo de Docente</label>
         <div class="segmented-control">
@@ -99,10 +114,12 @@
           <div class="option" [class.active]="tipoDocente === 'Por Contratar'" (click)="tipoDocente = 'Por Contratar'; eventoForm.materia = ''">Por Contratar</div>
         </div>
       </div>
+
       <div class="mb-3">
         <label class="form-label fw-bold">Nombre del Docente</label>
         <input type="text" class="form-control" [(ngModel)]="eventoForm.docente" placeholder="Escriba el nombre del docente">
       </div>
+
       <div class="mb-3">
         <label class="form-label fw-bold">Materia</label>
         <input *ngIf="tipoDocente === 'Por Contratar'" type="text" class="form-control" [(ngModel)]="eventoForm.materia" placeholder="Escriba la materia">
@@ -111,18 +128,30 @@
           <option *ngFor="let materia of materiasDisponibles" [value]="materia">{{ materia }}</option> 
         </select>
       </div>
-      <div class="row">
-        <div class="col mb-3">
-          <label class="form-label fw-bold">Inicio</label>
-          <input type="time" class="form-control" [(ngModel)]="eventoForm.inicio">
+
+      <div class="mb-3">
+        <label class="form-label fw-bold">Definir Bloques de Horario:</label>
+        <div class="bloques-container">
+          <div *ngFor="let bloque of eventoForm.bloques; let i = index" class="d-flex align-items-center mb-2" style="gap: 10px;">
+            <div class="flex-grow-1">
+              <small class="text-muted" style="font-size: 0.7rem;">Hora Inicio</small>
+              <input type="time" class="form-control" [(ngModel)]="bloque.inicio" step="3600">
+            </div>
+            <div class="flex-grow-1">
+              <small class="text-muted" style="font-size: 0.7rem;">Hora Fin</small>
+              <input type="time" class="form-control" [(ngModel)]="bloque.fin" step="3600">
+            </div>
+            <div class="mt-3">
+              <button class="btn btn-outline-danger btn-sm" (click)="eliminarBloque(i)">X</button>
+            </div>
+          </div>
         </div>
-        <div class="col mb-3">
-          <label class="form-label fw-bold">Fin</label>
-          <input type="time" class="form-control" [(ngModel)]="eventoForm.fin">
-        </div>
+        <button class="btn btn-primary btn-sm shadow-sm mt-2" (click)="agregarBloque()">+ Agregar Bloque</button>
       </div>
+
       <div *ngIf="mensajeError" class="error-inline">{{ mensajeError }}</div>
     </div>
+
     <div class="modal-footer">
       <button *ngIf="eventoEditando" class="btn btn-danger" (click)="eliminarEvento(modal)">Eliminar</button>
       <button class="btn btn-secondary" (click)="modal.dismiss()">Cancelar</button>

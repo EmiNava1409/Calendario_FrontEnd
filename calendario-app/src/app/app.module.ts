@@ -1,9 +1,9 @@
-import { NgModule, LOCALE_ID } from '@angular/core'; 
+import { NgModule, LOCALE_ID, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'; // Importa todo aquí
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { registerLocaleData } from '@angular/common'; 
-import localeEs from '@angular/common/locales/es';     
-import { FormsModule } from '@angular/forms';        
+import localeEs from '@angular/common/locales/es'; 
+import { FormsModule } from '@angular/forms'; 
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -16,13 +16,12 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { DragAndDropModule } from 'angular-draggable-droppable'; 
 import { HttpClientModule } from '@angular/common/http';
 
-
 registerLocaleData(localeEs);
 
 @NgModule({
   declarations: [
     AppComponent,
-    CalendarioComponent,  
+    CalendarioComponent
   ],
   imports: [
     BrowserModule,
@@ -41,6 +40,7 @@ registerLocaleData(localeEs);
   providers: [ 
     { provide: LOCALE_ID, useValue: 'es' } 
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA] // SE MUEVE AQUÍ: fuera de declarations
 })
 export class AppModule { }
